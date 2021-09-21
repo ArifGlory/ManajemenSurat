@@ -160,16 +160,24 @@
                                                                     @endif
                                                                     <option
                                                                         value="admin" {{$level == 'admin' ? 'selected' : ''}}>
-                                                                        Admin Adpim
+                                                                        Admin Bagian Kepegawaian dan Umum
                                                                     </option>
                                                                     <option
-                                                                        value="umum" {{$level == 'umum' ? 'selected' : ''}}>
-                                                                        Admin Biro Umum
+                                                                        value="umum" {{$level == 'umum' ? 'selected' : ''}}> <!-- ga ada pengaturan user -->
+                                                                         User Bagian Kepegawaian dan Umum
                                                                     </option>
-                                                                    <option
-                                                                        value="disposisi" {{$level == 'disposisi' ? 'selected' : ''}}>
-                                                                        Petugas Disposisi
+                                                                    <option value="subkoor" {{$level == 'subkoor' ? 'selected' : ''}}>
+                                                                            Sub Koor
                                                                     </option>
+                                                                        <option value="kabag" {{$level == 'kabag' ? 'selected' : ''}}>
+                                                                            Kepala Bagian
+                                                                        </option>
+                                                                        <option value="seketaris" {{$level == 'seketaris' ? 'selected' : ''}}>
+                                                                            Seketaris Direktorat Jenderal Bina Marga
+                                                                        </option>
+                                                                        <option value="direktur" {{$level == 'direktur' ? 'selected' : ''}}>
+                                                                            Direktur Jenderal Bina Marga
+                                                                        </option>
                                                                 </select>
                                                                 @error('level')
                                                                 <div class="invalid-feedback">
@@ -188,7 +196,9 @@
                                                                         name="id_opd_fk">
                                                                     @foreach($listPerangkat as $nama => $value)
                                                                         <option
-                                                                            value={{$value}} {{$value==$id_opd_fk ? 'selected' : ''}}>{{$nama}}</option>
+                                                                            value={{$value}} {{$value==$id_opd_fk ? 'selected' : ''}}>
+                                                                            {{$nama}}
+                                                                        </option>
                                                                     @endforeach
                                                                 </select>
                                                                 @error('id_opd_fk')

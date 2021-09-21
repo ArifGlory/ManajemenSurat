@@ -30,9 +30,9 @@ class PenggunaController extends Controller
             $page_count = $request->get('page_count');
             $countPaginate = $page_count == -1 ? User::count() : $page_count;
             if (Auth::user()->level == 'superadmin'):
-                $eloUser = User::perangkat()->whereIn('level', ['superadmin', 'admin', 'umum', 'disposisi']);
+                $eloUser = User::perangkat()->whereIn('level', ['superadmin', 'admin', 'umum', 'disposisi','subkoor','kabag','seketaris','direktur']);
             else:
-                $eloUser = User::perangkat()->where('level', 'umum', 'disposisi');
+                $eloUser = User::perangkat()->where('level', 'umum', 'disposisi','subkoor','kabag','seketaris','direktur');
             endif;
             if ($level) :
                 if ($cari) :

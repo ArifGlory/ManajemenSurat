@@ -16,7 +16,7 @@
             class="fas fa-signature"></i> <span>Jenis Penandatangan</span></a></li>
          <li class="{{activeMenu('dashboard/perangkat-daerah')}}"><a class="nav-link"
             href="{{url('dashboard/perangkat-daerah')}}"><i
-            class="fas fa-building"></i> <span>Pejabat / OPD</span></a></li>
+            class="fas fa-building"></i> <span>Pejabat / Bidang</span></a></li>
           <li class="{{activeMenu('dashboard/surat-masuk')}}"><a class="nav-link" href="{{url('dashboard/surat-masuk')}}"><i
                       class="fas fa-envelope"></i> <span>Surat Masuk (QR)</span></a></li>
          <li class="{{activeMenu('dashboard/kode-qr')}}"><a class="nav-link" href="{{url('dashboard/kode-qr')}}"><i

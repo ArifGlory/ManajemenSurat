@@ -14,35 +14,18 @@
          <li class="{{activeMenu('dashboard/jenis-penandatangan')}}"><a class="nav-link"
             href="{{url('dashboard/jenis-penandatangan')}}"><i
             class="fas fa-signature"></i> <span>Jenis Penandatangan</span></a></li>
-         <li class="{{activeMenu('dashboard/perangkat-daerah')}}"><a class="nav-link"
+         {{--<li class="{{activeMenu('dashboard/perangkat-daerah')}}"><a class="nav-link"
             href="{{url('dashboard/perangkat-daerah')}}"><i
-            class="fas fa-building"></i> <span>Pejabat / OPD</span></a></li>
-          <li class="{{activeMenu('dashboard/surat-masuk')}}"><a class="nav-link" href="{{url('dashboard/surat-masuk')}}"><i
-                      class="fas fa-envelope"></i> <span>Surat Masuk (QR)</span></a></li>
+            class="fas fa-building"></i> <span>Pejabat / Bidang</span></a></li>--}}
+          {{--<li class="{{activeMenu('dashboard/surat-masuk')}}"><a class="nav-link" href="{{url('dashboard/surat-masuk')}}"><i
+                      class="fas fa-envelope"></i> <span>Surat Masuk (QR)</span></a></li>--}}
          <li class="{{activeMenu('dashboard/kode-qr')}}"><a class="nav-link" href="{{url('dashboard/kode-qr')}}"><i
-            class="fas fa-qrcode"></i> <span>Surat Keluar (QR)</span></a></li>
-{{--         <li class="{{activeMenu('dashboard/signature-qr')}}"><a class="nav-link"--}}
-{{--            href="{{url('dashboard/signature-qr')}}"><i--}}
-{{--            class="fas fa-sign"></i> <span>Signature QR</span></a></li>--}}
-         <li class="nav-item dropdown {{activeMenu('dashboard/statistik')}}">
-            <a href="#" class="nav-link has-dropdown"><i class="fas fa-chart-bar"></i><span>Statistik Surat Keluar</span></a>
-            <ul class="dropdown-menu">
-               <li class="{{activeMenu('dashboard/statistik/tanda-tangan')}}"><a class="nav-link"
-                  href="{{url('dashboard/statistik/tanda-tangan')}}">Tanda Tangan</a>
-               </li>
-               <li class="{{activeMenu('dashboard/statistik/perangkat-daerah')}}"><a class="nav-link"
-                  href="{{url('dashboard/statistik/perangkat-daerah')}}">Perangkat Daerah</a>
-               </li>
-               <li class="{{activeMenu('dashboard/statistik/signature-opd')}}"><a class="nav-link"
-                  href="{{url('dashboard/statistik/signature-opd')}}">Signature QR / PD</a>
-               </li>
-            </ul>
-         </li>
+            class="fas fa-qrcode"></i> <span>Surat Keluar</span></a></li>
          <li class="menu-header">SET</li>
          <li class="{{activeMenu('dashboard/pengguna')}}"><a class="nav-link" href="{{route('pengguna')}}"><i
             class="fas fa-users"></i> <span>Pengguna Aplikasi</span></a></li>
-         <li class="{{activeMenu('dashboard/logs')}}"><a class="nav-link" href="{{route('logs')}}"><i
-            class="fas fa-history"></i> <span>Log Aktivitas</span></a></li>
+         {{--<li class="{{activeMenu('dashboard/logs')}}"><a class="nav-link" href="{{route('logs')}}"><i
+            class="fas fa-history"></i> <span>Log Aktivitas</span></a></li>--}}
          <li class="{{activeMenu('dashboard/settings')}}"><a class="nav-link" href="{{route('settings')}}"><i
             class="fas fa-cog"></i> <span>Konfigurasi Aplikasi</span></a></li>
       </ul>

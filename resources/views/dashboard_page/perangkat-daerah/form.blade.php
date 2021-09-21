@@ -1,5 +1,5 @@
 @extends('mylayouts.app')
-@section('title', 'Form '.ucwords($mode).' Pejabat / Perangkat Daerah')
+@section('title', 'Form '.ucwords($mode).' Pejabat / Bidang')
 @push('library-css')
 <style>
    .select_sm {
@@ -14,11 +14,11 @@
 @section('content')
 <section class="section">
    <div class="section-header">
-      <h1>{{'Form '.ucwords($mode).' Pejabat / Perangkat Daerah'}}</h1>
+      <h1>{{'Form '.ucwords($mode).' Pejabat / Bidang'}}</h1>
       <div class="section-header-breadcrumb">
          <div class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></div>
          <div class="breadcrumb-item"><a href="{{route('perangkat-daerah')}}">Daftar PD</a></div>
-         <div class="breadcrumb-item active">{{'Form '.ucwords($mode).' PD'}}</div>
+         <div class="breadcrumb-item active">{{'Form '.ucwords($mode).''}}</div>
       </div>
    </div>
    <div class="section-body">
@@ -54,7 +54,7 @@
                            </div>
                         </div>
                         <div class="row mb-3">
-                           <label class="col-sm-3 col-lg-3 col-form-label">Alias</label>
+                           <label class="col-sm-3 col-lg-3 col-form-label">Bidang / Bagian</label>
                            <div class="col-sm-9 col-lg-9">
                               <div class="input-group">
                                  <span class="input-group-prepend">
@@ -62,7 +62,7 @@
                                  <i class="fa fa-chalkboard-teacher"></i></label>
                                  </span>
                                  <input class="form-control @error('alias_opd') is-invalid @enderror"
-                                    placeholder="Contoh : Bappeda"
+                                    placeholder="Contoh : Bidang  Umum"
                                     required="required" name="alias_opd" id="alias_opd"
                                     type="text"
                                     value="{{$alias_opd}}">
@@ -84,7 +84,7 @@
                                  </span>
                                  <input
                                     class="form-control @error('alamat_opd') is-invalid @enderror"
-                                    placeholder="Contoh : Jalan Robert Wolter Monginsidi No. 223, Tanjungkarang Pusat"
+                                    placeholder="Contoh : Jalan Robert Wolter Monginsidi No. xxx"
                                      name="alamat_opd" id="alamat_opd"
                                     type="text" value="{{$alamat_opd}}">
                               </div>
@@ -104,7 +104,7 @@
                                  <i class="fa fa-envelope"></i></label>
                                  </span>
                                  <input class="form-control @error('email_opd') is-invalid @enderror"
-                                    placeholder="Contoh : bappeda@lampungprov.go.id"
+                                    placeholder="Contoh : umum@gmail.com"
                                     name="email_opd" id="email_opd"
                                     type="email"
                                     value="{{$email_opd}}">
