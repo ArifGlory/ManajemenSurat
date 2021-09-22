@@ -32,7 +32,7 @@
                                     </div>
                                     @if($dataPengguna->id_opd_fk!='')
                                         <div class="form-group row m-0">
-                                            <label class="col-4 col-form-label">Petugas Disposisi:</label>
+                                            <label class="col-4 col-form-label">Bidang </label>
                                             <div class="col-8">
                                                 <span
                                                     class="form-control-plaintext font-weight-bolder">{{$dataPengguna->nama_opd}}</span>

@@ -32,36 +32,6 @@
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
-                        <div class="card-icon bg-danger">
-                            <i class="far fa-newspaper"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Pejabat & Perangkat Daerah</h4>
-                            </div>
-                            <div class="card-body">
-                                {{format_angka_indo($perangkatdaerah)}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-warning">
-                            <i class="far fa-check-circle"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Surat Masuk</h4>
-                            </div>
-                            <div class="card-body">
-                                {{format_angka_indo($suratmasuk)}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
                         <div class="card-icon bg-info">
                             <i class="far fa-envelope"></i>
                         </div>
@@ -74,31 +44,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-success">
-                            <i class="fas fa-signature"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Signature QR</h4>
-                            </div>
-                            <div class="card-body">
-                                {{format_angka_indo($signatureqr)}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="containerGrafik">
-
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 

@@ -40,7 +40,9 @@
                         <tr>
                             <th width="2%"><input type="checkbox" id="check-all"></th>
                             <th width="3%">No.</th>
-                            <th width="70%">Jenis Penandatangan</th>
+                            <th width="">Jenis Penandatangan</th>
+                            <th width="">Nama Pejabat</th>
+                            <th width="">NIP</th>
                             <th width="15%">Status</th>
                             <th width="10%">Actions</th>
                         </tr>
@@ -105,6 +107,34 @@
                                 </div>
                             </div>
 
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 col-form-label">
+                                        <label>Nama Pejabat</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input required type="text" id="nama_pejabat" class="form-control form-control-sm"
+                                               name="nama_pejabat">
+                                        <div class="invalid-feedback" id="error_nama_pejabat">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 col-form-label">
+                                        <label>NIP Pejabat</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input required type="text" id="nip_pejabat" class="form-control form-control-sm"
+                                               name="nip_pejabat">
+                                        <div class="invalid-feedback" id="error_nip_pejabat">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="col-12">
                                 <div class="form-group row">
@@ -127,7 +157,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            {{--<div class="col-12">
                                 <div class="form-group row">
                                     <div class="col-sm-3 col-form-label">
                                         <label>Upload Cert</label>
@@ -140,8 +170,8 @@
                                         <p class="mt-2" id="cert-text"></p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12">
+                            </div>--}}
+                            {{--<div class="col-12">
                                 <div class="form-group row">
                                     <div class="col-sm-3 col-form-label">
                                         <label>Upload Private Key</label>
@@ -154,7 +184,7 @@
                                         <p class="mt-2" id="priv_key-text"></p>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
                         </div>
                     </div>
                     <div class="modal-footer bg-whitesmoke">
@@ -226,6 +256,8 @@
                         className: 'text-center'
                     },
                     {data: 'jenis_ttd', name: 'jenis_ttd', responsivePriority: -1},
+                    {data: 'nama_pejabat', name: 'nama_pejabat', responsivePriority: -1},
+                    {data: 'nip_pejabat', name: 'nip_pejabat', responsivePriority: -1},
                     {
                         data: 'active',
                         name: 'active',
@@ -290,11 +322,13 @@
             $('#judul').text('FORM TAMBAH JENIS PENANDATANGAN'); // Set Title to Bootstrap modal title
             $('#teksSimpan').text('Tambah');
             $('#btnsave').show();
-            $('#cert-text').text("");
-            $('#priv_key-text').text("");
+            //$('#cert-text').text("");
+           // $('#priv_key-text').text("");
             $('[name="jenis_ttd"]').prop('disabled', false);
+            $('[name="nama_pejabat"]').prop('disabled', false);
+            $('[name="nip_pejabat"]').prop('disabled', false);
             $('[name="active"]').prop('disabled', false);
-            $('[name="cert"]').prop('disabled', false);
+           // $('[name="cert"]').prop('disabled', false);
             $('#btnbatal').hide();
         }
 
@@ -303,7 +337,9 @@
                 save_method = 'update';
                 id_jenis_ttd = $(this).attr('data-id_jenis_ttd');
                 jenis_ttd = $(this).attr('data-jenis_ttd');
-                cert = $(this).attr('data-cert');
+                nama_pejabat = $(this).attr('data-nama_pejabat');
+                nip_pejabat = $(this).attr('data-nip_pejabat');
+              //  cert = $(this).attr('data-cert');
                 privKey = $(this).attr('data-priv');
                 active = $(this).attr('data-active');
                 $('#form')[0].reset(); // reset form on modals
@@ -314,16 +350,18 @@
                 $('#modal_form').modal('show'); // sh
                 $('[name="id_jenis_ttd"]').val(id_jenis_ttd);
                 $('[name="jenis_ttd"]').val(jenis_ttd);
+                $('[name="nama_pejabat"]').val(nama_pejabat);
+                $('[name="nip_pejabat"]').val(nip_pejabat);
                 $('[name="categorys_seotitle"]').val(categorys_seotitle);
                 $('[name="active"]').val(active);
                 $('#judul').text('FORM UBAH JENIS PENANDATANGAN'); // Set Title to Bootstrap modal titlep modal title
                 $('#teksSimpan').text('Simpan Perubahan');
-                $('#cert-text').text(cert);
-                $('#priv_key-text').text(privKey);
+               // $('#cert-text').text(cert);
+               // $('#priv_key-text').text(privKey);
                 $('#btnsave').show();
                 $('[name="jenis_ttd"]').prop('disabled', false);
                 $('[name="active"]').prop('disabled', false);
-                $('[name="cert"]').prop('disabled', false);
+             //   $('[name="cert"]').prop('disabled', false);
                 $('#btnbatal').show();
                 $('#btnbatal').text('Batal Ubah');
             });

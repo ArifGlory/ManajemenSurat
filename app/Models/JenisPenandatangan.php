@@ -15,6 +15,8 @@ class JenisPenandatangan extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'jenis_ttd',
+        'nama_pejabat',
+        'nip_pejabat',
         'active',
         'created_by',
         'updated_by',
@@ -37,6 +39,8 @@ class JenisPenandatangan extends Model
 
     public static $attributeRule = [
         'jenis_ttd' => 'Jenis Penandatangan',
+        'nama_pejabat' => 'Nama Pejabat',
+        'nip_pejabat' => 'NIP Pejabat',
         'active' => 'Status Aktif',
     ];
 

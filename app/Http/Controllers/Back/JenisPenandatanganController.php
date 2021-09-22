@@ -39,6 +39,8 @@ class JenisPenandatanganController extends Controller
                 $btn .= '<a href="javascript:void(0)" class="btn btn-sm btn-icon btn-success waves-effect clickable-edit" title="Edit"
                 data-id_jenis_ttd="' . Hashids::encode($row->id_jenis_ttd) . '"
                 data-jenis_ttd="' . $row->jenis_ttd . '"
+                data-nama_pejabat="' . $row->nama_pejabat . '"
+                data-nip_pejabat="' . $row->nip_pejabat . '"
                 data-active="' . $row->active . '"><i class="fa fa-edit"></i></button>';
                 $btn .= '<a href="javascript:void(0)" onclick="deleteData(' . "'" . Hashids::encode($row->id_jenis_ttd) . "'" . ')" class="btn btn-sm btn-icon btn-danger waves-effect" title="Hapus"><i class="fa fa-trash"></i></button>';
                 $btn .= '</div>';
@@ -72,6 +74,8 @@ class JenisPenandatanganController extends Controller
 
         $active = $request->input('active');
         $jenis_ttd = $request->input('jenis_ttd');
+        $nama_pejabat = $request->input('nama_pejabat');
+        $nip_pejabat = $request->input('nip_pejabat');
 
         //validasi
         $data = [];
@@ -80,6 +84,8 @@ class JenisPenandatanganController extends Controller
 
         $rule = JenisPenandatangan::$validationRule;
         $rule['jenis_ttd'] = 'required|max:255|unique:tbl_jenis_ttd,jenis_ttd';
+        $rule['nama_pejabat'] = 'required';
+        $rule['nip_pejabat'] = 'required';
 
         $validator = Validator::make($request->all(),
             $rule,
@@ -120,6 +126,8 @@ class JenisPenandatanganController extends Controller
             $dataInput = [
                 'active' => $active,
                 'jenis_ttd' => $jenis_ttd,
+                'nama_pejabat' => $nama_pejabat,
+                'nip_pejabat' => $nip_pejabat,
                 'created_by' => Auth::user()->id,
                 'updated_by' => Auth::user()->id,
             ];
