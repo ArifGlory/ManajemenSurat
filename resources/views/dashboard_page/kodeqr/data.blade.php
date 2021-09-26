@@ -36,13 +36,13 @@
                                     <a class="dropdown-item has-icon" href="{{url('kodeqr/'.$dataQR->qrcode)}}"
                                        target="_blank"><i class="fa fa-download"></i> Download</a>
                                     <a class="dropdown-item has-icon"
-                                       href="{{url('dashboard/kode-qr/print/'.Hashids::encode($dataQR->id_qr))}}"
+                                       href="{{url('dashboard/surat-keluar/print/'.Hashids::encode($dataQR->id_qr))}}"
                                        target="_blank"><i class="fa fa-print"></i> Print</a>
                                     <a class="dropdown-item has-icon"
                                        href="{{url('cek-qr/'.Hashids::encode($dataQR->id_qr))}}" target="_blank"><i
                                             class="fa fa-eye"></i> Detail</a>
                                     <a class="dropdown-item has-icon"
-                                       href="{{url('dashboard/kode-qr/edit/'.Hashids::encode($dataQR->id_qr))}}"><i
+                                       href="{{url('dashboard/surat-keluar/edit/'.Hashids::encode($dataQR->id_qr))}}"><i
                                             class="fa fa-edit"></i> Edit</a>
                                     <a class="dropdown-item has-icon" href="javascript:void(0)"
                                        onclick="deleteData('{{Hashids::encode($dataQR->id_qr)}}')"><i

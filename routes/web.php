@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::get('/', [AuthenticatedSessionController::class, 'create']);
-Route::get('cek-qr/{id}', [KodeQRController::class, 'show']);
+Route::get('detail-surat-keluar/{id}', [KodeQRController::class, 'show']);
 Route::get('surat-masuk/{id}', [SuratMasukController::class, 'show']);
 Route::get('show-disposisi/{id}', [SuratMasukController::class, 'dataDisposisiShow']);
 Route::get('signature-qr/{id}', [SignatureQRController::class, 'show']);
@@ -89,12 +89,12 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web', 'auth']], functio
         Route::put('update/{id}', [PerangkatDaerahController::class, 'update']);
     });
 
-    Route::group(['prefix' => 'kode-qr', 'middleware' => ['adminsuper']], function () {
-        Route::get('/', [KodeQRController::class, 'index'])->name('kode-qr');
-        Route::get('data', [KodeQRController::class, 'data'])->name('kode-qr.data');
+    Route::group(['prefix' => 'surat-keluar', 'middleware' => ['seluruhlevel']], function () {
+        Route::get('/', [KodeQRController::class, 'index'])->name('surat-keluar');
+        Route::get('data', [KodeQRController::class, 'data'])->name('surat-keluar.data');
         Route::delete('delete/{id}', [KodeQRController::class, 'destroy']);
         Route::post('bulkDelete', [KodeQRController::class, 'bulkDelete']);
-        Route::get('form', [KodeQRController::class, 'form'])->name('kode-qr.form');
+        Route::get('form', [KodeQRController::class, 'form'])->name('surat-keluar.form');
         Route::post('create', [KodeQRController::class, 'create']);
         Route::get('edit/{id}', [KodeQRController::class, 'edit']);
         Route::get('print/{id}', [KodeQRController::class, 'print']);

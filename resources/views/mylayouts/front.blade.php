@@ -37,7 +37,7 @@
             <div class="container">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a href="#" class="nav-link"><i class="fa fa-qrcode"></i><span>Hasil Scan Kode QR</span></a>
+                        <a href="#" class="nav-link"><i class="fa fa-qrcode"></i><span>Detail Surat</span></a>
                     </li>
                 </ul>
             </div>

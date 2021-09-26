@@ -16,7 +16,7 @@
         <div class="section-header">
             <h1>Daftar Surat Keluar (QR)</h1>
             <div class="section-header-button">
-                <a href="{{ route('kode-qr.form') }}"
+                <a href="{{ route('surat-keluar.form') }}"
                    class="btn btn-primary btn-sm"><i
                         class="fa fa-plus mr-50"></i>
                     Tambah
@@ -29,27 +29,11 @@
         </div>
         <div class="section-body">
             <div class="row">
-                <div class="col-md-12">
+                {{--<div class="col-md-12">
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-row mb-3">
-                                        <div class="col-lg-12">
-                                            <label>Dari Perangkat Daerah :</label>
-                                            <select class="select_cari form-control" id="id_opd_fk"
-                                                    name="id_opd_fk">
-                                                <option value="">Seluruh</option>
-                                                @foreach($listPerangkat as $nama => $value)
-                                                    <option
-                                                        value={{$value}}>{{$nama}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="form-row mb-3">
                                         <div class="col-lg-12">
                                             <label>Ditandantangani oleh :</label>
@@ -108,7 +92,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div>--}}
 
                 <div class="col-md-12">
                     <div class="alert alert-warning">
@@ -130,6 +114,7 @@
                                     <th>Perihal</th>
                                     {{--                            <th>Jenis Penandatangan</th>--}}
                                     <th>QRCODE</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
@@ -190,10 +175,9 @@
                 autoWidth: false,
                 {{--ajax: "{{ route('perangkat-daerah.data') }}",--}}
                 ajax: {
-                    url: "{{ route('kode-qr.data') }}",
+                    url: "{{ route('surat-keluar.data') }}",
                     type: "GET",
                     data: function (d) {
-                        d.id_opd_fk = $("#id_opd_fk").val();
                         d.id_jenis_ttd = $("#id_jenis_ttd").val();
                         d.tgl_mulai = $("#tgl_mulai").val();
                         d.tgl_akhir = $("#tgl_akhir").val();
@@ -223,6 +207,7 @@
                     {data: 'perihal', name: 'perihal', responsivePriority: -1},
                     // {data: 'jenis_ttd', name: 'jenis_ttd', responsivePriority: -1},
                     {data: 'qrcode', name: 'qrcode', orderable: false, searchable: false, className: 'text-center'},
+                    {data: 'status_surat', name: 'status_surat', orderable: false, searchable: false, className: 'text-center'},
                     {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
                 ],
 
@@ -283,12 +268,12 @@
         }
 
         function deleteData(paramId) {
-            var url = '{{ url('dashboard/kode-qr/delete/') }}';
+            var url = '{{ url('dashboard/surat-keluar/delete/') }}';
             deleteDataTable(paramId, url);
         }
 
         function bulkDelete() {
-            var url = '{{ url('dashboard/kode-qr/bulkDelete/') }}';
+            var url = '{{ url('dashboard/surat-keluar/bulkDelete/') }}';
             bulkDeleteTable(url);
         }
 

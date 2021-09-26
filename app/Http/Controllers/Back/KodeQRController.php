@@ -32,14 +32,9 @@ class KodeQRController extends Controller
     public function data(Request $request)
     {
         $data = KodeQR::select('*');
-        $id_opd_fk = $request->get('id_opd_fk');
         $id_jenis_ttd = $request->get('id_jenis_ttd');
         $tgl_mulai = ($request->get('tgl_mulai'));
         $tgl_akhir = ($request->get('tgl_akhir'));
-
-        if ($id_opd_fk) :
-            $data = $data->where('id_opd_fk', $id_opd_fk);
-        endif;
 
         if ($id_jenis_ttd) :
             $data = $data->where('id_jenis_ttd', $id_jenis_ttd);
@@ -64,6 +59,15 @@ class KodeQRController extends Controller
                 $no_surat = '<label class="font-weight-bolder">' . $row->no_surat . '</label>';
                 return $no_surat;
             })
+            ->editColumn('status_surat', function ($row) {
+               if ($row->status_surat == "DRAFT"){
+                   $status_surat = '<span class="badge badge-success">'.$row->status_surat.'</span>';
+               }else{
+                   $status_surat = '<span class="badge badge-primary">'.$row->status_surat.'</span>';
+               }
+
+                return $status_surat;
+            })
             ->editColumn('tgl_surat', function ($row) {
                 return $row->tgl_surat ? tanggalIndo($row->tgl_surat) : '';
             })
@@ -75,9 +79,9 @@ class KodeQRController extends Controller
             ->addColumn('action', function ($row) {
                 $btn = '<div class="btn-group" role="group" aria-label="First group">';
                 $btn .= '<a href="' . url('kodeqr/' . $row->qrcode) . '" class="btn btn-sm btn-icon btn-info waves-effect" target="_blank" title="Download"><i class="fa fa-download"></i></a>';
-                $btn .= '<a href="' . url('dashboard/kode-qr/print/' . Hashids::encode($row->id_qr)) . '" target="_blank" class="btn btn-sm btn-icon btn-dark waves-effect" title="Print"><i class="fa fa-print"></i></a>';
-                $btn .= '<a href="' . url('cek-qr/' . Hashids::encode($row->id_qr)) . '" target="_blank" class="btn btn-sm btn-icon btn-primary waves-effect" title="Detail"><i class="fa fa-eye"></i></a>';
-                $btn .= '<a href="' . url('dashboard/kode-qr/edit/' . Hashids::encode($row->id_qr)) . '" class="btn btn-sm btn-icon btn-success waves-effect" title="Edit"><i class="fa fa-edit"></i></a>';
+                $btn .= '<a href="' . url('dashboard/surat-keluar/print/' . Hashids::encode($row->id_qr)) . '" target="_blank" class="btn btn-sm btn-icon btn-dark waves-effect" title="Print"><i class="fa fa-print"></i></a>';
+                $btn .= '<a href="' . url('detail-surat-keluar/' . Hashids::encode($row->id_qr)) . '" target="_blank" class="btn btn-sm btn-icon btn-primary waves-effect" title="Detail"><i class="fa fa-eye"></i></a>';
+                $btn .= '<a href="' . url('dashboard/surat-keluar/edit/' . Hashids::encode($row->id_qr)) . '" class="btn btn-sm btn-icon btn-success waves-effect" title="Edit"><i class="fa fa-edit"></i></a>';
                 $btn .= '<a href="javascript:void(0)" onclick="deleteData(' . "'" . Hashids::encode($row->id_qr) . "'" . ')" class="btn btn-sm btn-icon btn-danger waves-effect" title="Hapus"><i class="fa fa-trash"></i></a>';
                 $btn .= '</div>';
                 return $btn;
@@ -89,7 +93,6 @@ class KodeQRController extends Controller
     public function dataBK(Request $request)
     {
         if ($request->ajax()) {
-            $id_opd_fk = $request->get('id_opd_fk');
             $id_jenis_ttd = $request->get('id_jenis_ttd');
             $tgl_mulai = ($request->get('tgl_mulai'));
             $tgl_akhir = ($request->get('tgl_akhir'));
@@ -101,9 +104,6 @@ class KodeQRController extends Controller
 
             $eloKodeQR = KodeQR::orderBy('created_at', 'DESC');
 
-            if ($id_opd_fk) :
-                $dataKodeQR = $eloKodeQR->where('id_opd_fk', $id_opd_fk);
-            endif;
 
             if ($id_jenis_ttd) :
                 $dataKodeQR = $eloKodeQR->where('id_jenis_ttd', $id_jenis_ttd);
@@ -159,13 +159,12 @@ class KodeQRController extends Controller
         $data =
             [
                 'mode' => 'tambah',
-                'action' => url('dashboard/kode-qr/create'),
+                'action' => url('dashboard/surat-keluar/create'),
                 'no_surat' => old('no_surat') ? old('no_surat') : '',
                 'tgl_surat' => old('tgl_surat') ? old('tgl_surat') : date('d/m/Y'),
                 'kepada' => old('kepada') ? old('kepada') : '',
                 'lampiran' => old('lampiran') ? old('lampiran') : '',
                 'perihal' => old('perihal') ? old('perihal') : '',
-                'id_opd_fk' => old('id_opd_fk') ? old('id_opd_fk') : '',
                 'id_jenis_ttd_fk' => old('id_jenis_ttd_fk') ? old('id_jenis_ttd_fk') : '',
                 'listPerangkat' => PerangkatDaerah::pluck('id_opd', 'nama_opd')->all(),
                 'listJenis' => JenisPenandatangan::pluck('id_jenis_ttd', 'jenis_ttd')->all(),
@@ -179,7 +178,6 @@ class KodeQRController extends Controller
     public function create(Request $request)
     {
         $rule = KodeQR::$validationRule;
-        $rule['no_surat'] = 'required|unique:tbl_qrcode,no_surat';
         if ($request->hasFile('berkas')) {
             $rule['berkas'] = 'max:1024|mimes:pdf';
         }
@@ -193,8 +191,8 @@ class KodeQRController extends Controller
             $berkasFile = $request->file('berkas');
             $berkas = $this->uploadFile($berkasFile, 'berkas');
             $jenisTtd = JenisPenandatangan::find($request->input('id_jenis_ttd_fk'));
-            if ($jenisTtd->cert != null && $jenisTtd->priv_key)
-                $this->signPDF($berkas, $jenisTtd);
+           /* if ($jenisTtd->cert != null && $jenisTtd->priv_key)
+                $this->signPDF($berkas, $jenisTtd);*/
 
         } else {
             $berkas = null;
@@ -207,7 +205,6 @@ class KodeQRController extends Controller
         $dataCreate = array(
             'no_surat' => $request->input('no_surat'),
             'tgl_surat' => ubahformatTgl($request->input('tgl_surat')),
-            'id_opd_fk' => $request->input('id_opd_fk'),
             'kepada' => $request->input('kepada'),
             'lampiran' => $request->input('lampiran'),
             'perihal' => $request->input('perihal'),
@@ -228,14 +225,14 @@ class KodeQRController extends Controller
         $dataMaster->update($dataUpdate);
         if ($insert) :
             saveLogs('menambahkan data ' . $request->input('no_surat') . ' pada fitur surat keluar');
-            return redirect(route('kode-qr'))
+            return redirect(route('surat-keluar'))
                 ->with('pesan_status', [
                     'tipe' => 'success',
                     'desc' => 'surat keluar berhasil ditambahkan',
                     'judul' => 'data surat keluar'
                 ]);
         else :
-            return redirect(route('kode-qr.form'))
+            return redirect(route('surat-keluar.form'))
                 ->with('pesan_status', [
                     'tipe' => 'error',
                     'desc' => 'kodeqr gagal ditambahkan',
@@ -253,23 +250,21 @@ class KodeQRController extends Controller
             $data =
                 [
                     'mode' => 'ubah',
-                    'action' => url('dashboard/kode-qr/update/' . $id),
+                    'action' => url('dashboard/surat-keluar/update/' . $id),
                     'no_surat' => old('no_surat') ? old('no_surat') : $dataMaster->no_surat,
                     'tgl_surat' => old('tgl_surat') ? old('tgl_surat') : TanggalIndo2($dataMaster->tgl_surat),
                     'kepada' => old('kepada') ? old('kepada') : $dataMaster->kepada,
                     'lampiran' => old('lampiran') ? old('lampiran') : $dataMaster->lampiran,
                     'perihal' => old('perihal') ? old('perihal') : $dataMaster->perihal,
-                    'id_opd_fk' => old('id_opd_fk') ? old('id_opd_fk') : $dataMaster->id_opd_fk,
                     'id_jenis_ttd_fk' => old('id_jenis_ttd_fk') ? old('id_jenis_ttd_fk') : $dataMaster->id_jenis_ttd_fk,
                     'qrcode' => $dataMaster->qrcode,
                     'berkas' => $dataMaster->berkas,
-                    'listPerangkat' => PerangkatDaerah::pluck('id_opd', 'nama_opd')->all(),
                     'listJenis' => JenisPenandatangan::pluck('id_jenis_ttd', 'jenis_ttd')->all()
 
                 ];
             return view('dashboard_page.kodeqr.form', $data);
         else :
-            return redirect(route('kode-qr'))
+            return redirect(route('surat-keluar'))
                 ->with('pesan_status', [
                     'tipe' => 'error',
                     'desc' => 'Surat Keluar tidak ditemukan',
@@ -284,7 +279,7 @@ class KodeQRController extends Controller
         $idDecode = Hashids::decode($id)[0];
         $dataMaster = KodeQR::find($idDecode);
 
-        $rule['no_surat'] = 'required|unique:tbl_qrcode,no_surat,' . $idDecode . ',id_qr';
+      //  $rule['no_surat'] = 'required|unique:tbl_qrcode,no_surat,' . $idDecode . ',id_qr';
         if ($request->hasFile('berkas')) {
             $rule['berkas'] = 'max:1024|mimes:pdf';
         }
@@ -315,7 +310,6 @@ class KodeQRController extends Controller
         $dataUpdate = [
             'no_surat' => $request->input('no_surat'),
             'tgl_surat' => ubahformatTgl($request->input('tgl_surat')),
-            'id_opd_fk' => $request->input('id_opd_fk'),
             'kepada' => $request->input('kepada'),
             'lampiran' => $request->input('lampiran'),
             'perihal' => $request->input('perihal'),
@@ -327,14 +321,14 @@ class KodeQRController extends Controller
 
         if ($update) :
             saveLogs('memperbarui data ' . $request->input('no_surat') . ' pada fitur surat keluar');
-            return redirect(route('kode-qr'))
+            return redirect(route('surat-keluar'))
                 ->with('pesan_status', [
                     'tipe' => 'success',
                     'desc' => 'Surat Keluar berhasil diupdate',
                     'judul' => 'Data Surat Keluar'
                 ]);
         else :
-            return redirect(url('dashboard/kode-qr/edit/' . $id))
+            return redirect(url('dashboard/surat-keluar/edit/' . $id))
                 ->with('pesan_status', [
                     'tipe' => 'error',
                     'desc' => 'Surat Keluar gagal diupdate',
@@ -350,19 +344,20 @@ class KodeQRController extends Controller
             $dataMaster = $checkData[0];
             $data =
                 [
+                    'id_surat' => $dataMaster->id_qr,
                     'no_surat' => $dataMaster->no_surat,
                     'tgl_surat' => TanggalIndo2($dataMaster->tgl_surat),
                     'kepada' => $dataMaster->kepada,
                     'lampiran' => $dataMaster->lampiran,
                     'perihal' => $dataMaster->perihal,
-                    'nama_opd' => PerangkatDaerah::where('id_opd', $dataMaster->id_opd_fk)->first()->nama_opd,
                     'jenis_ttd' => JenisPenandatangan::where('id_jenis_ttd', $dataMaster->id_jenis_ttd_fk)->first()->jenis_ttd,
                     'qrcode' => $dataMaster->qrcode,
+                    'status_surat' => $dataMaster->status_surat,
                     'berkas' => $dataMaster->berkas,
                 ];
             return view('dashboard_page.kodeqr.show', $data);
         else :
-            return redirect(route('kode-qr'))
+            return redirect(route('surat-keluar'))
                 ->with('pesan_status', [
                     'tipe' => 'error',
                     'desc' => 'Surat Keluar tidak ditemukan',
@@ -382,7 +377,7 @@ class KodeQRController extends Controller
                 ];
             return view('dashboard_page.kodeqr.print', $data);
         else :
-            return redirect(route('kode-qr'))
+            return redirect(route('surat-keluar'))
                 ->with('pesan_status', [
                     'tipe' => 'error',
                     'desc' => 'Surat Keluar tidak ditemukan',
@@ -402,9 +397,9 @@ class KodeQRController extends Controller
 // set additional information
         $info = array(
             'Name' => $certInfo->jenis_ttd,
-            'Location' => 'Pemerintah Provinsi Lampung',
+            'Location' => 'Dirjen Bina Marga',
             'Reason' => 'Sebagai validasi surat terverifikasi elektronik.',
-            'ContactInfo' => 'info@lampungprov.go.id',
+            'ContactInfo' => 'info@binamarga.pu.go.id',
         );
 //        dd($certificate, $info);
 
@@ -413,7 +408,7 @@ class KodeQRController extends Controller
             $page = $pdf->importPage($i);
             $pdf->useTemplate($page, 0, 0);
             // set document signature
-            $pdf->setSignature($certificate, $priv_key, 'ranma123', '', 2, $info);
+            $pdf->setSignature($certificate, $priv_key, '12345678', '', 2, $info);
         }
 //        $pdf->setSi
 
@@ -467,7 +462,7 @@ class KodeQRController extends Controller
 
     public function tampil_grafik_pd(Request $request)
     {
-        if ($request->ajax()) {
+       /* if ($request->ajax()) {
             $tahun = $request->get('tahun');
             $bulan = $request->get('bulan');
             if ($tahun != "") {
@@ -484,6 +479,6 @@ class KodeQRController extends Controller
             $data = $query->get();
             echo json_encode($data);
         }
-        return false;
+        return false;*/
     }
 }

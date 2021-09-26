@@ -14,7 +14,7 @@
             <h1>{{'Form Disposisi Surat Masuk (QR)'}}</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="{{route('kode-qr')}}">Disposisi Surat Masuk (QR)</a></div>
+                <div class="breadcrumb-item"><a href="{{route('surat-keluar')}}">Disposisi Surat Masuk (QR)</a></div>
                 <div class="breadcrumb-item active">{{'Form Disposisi Surat Masuk (QR)'}}</div>
             </div>
         </div>

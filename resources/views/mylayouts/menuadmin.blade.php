@@ -19,7 +19,7 @@
             class="fas fa-building"></i> <span>Pejabat / Bidang</span></a></li>
           <li class="{{activeMenu('dashboard/surat-masuk')}}"><a class="nav-link" href="{{url('dashboard/surat-masuk')}}"><i
                       class="fas fa-envelope"></i> <span>Surat Masuk (QR)</span></a></li>
-         <li class="{{activeMenu('dashboard/kode-qr')}}"><a class="nav-link" href="{{url('dashboard/kode-qr')}}"><i
+         <li class="{{activeMenu('dashboard/surat-keluar')}}"><a class="nav-link" href="{{url('dashboard/kode-qr')}}"><i
             class="fas fa-qrcode"></i> <span>Surat Keluar (QR)</span></a></li>
 {{--         <li class="{{activeMenu('dashboard/signature-qr')}}"><a class="nav-link"--}}
 {{--            href="{{url('dashboard/signature-qr')}}"><i--}}

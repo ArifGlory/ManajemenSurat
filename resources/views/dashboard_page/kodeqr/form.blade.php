@@ -21,7 +21,7 @@
             <h1>{{'Form '.ucwords($mode).' Surat Keluar (QR)'}}</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="{{route('kode-qr')}}">Daftar Surat Keluar (QR)</a></div>
+                <div class="breadcrumb-item"><a href="{{route('surat-keluar')}}">Daftar Surat Keluar (QR)</a></div>
                 <div class="breadcrumb-item active">{{'Form '.ucwords($mode).' Surat Keluar (QR)'}}</div>
             </div>
         </div>
@@ -46,7 +46,7 @@
                                  <i class="fa fa-list"></i></label>
                                  </span>
                                                 <input class="form-control @error('no_surat') is-invalid @enderror"
-                                                       required="required" name="no_surat" id="no_surat"
+                                                       name="no_surat" id="no_surat" placeholder="boleh dikosongkan ketika awal diisi"
                                                        type="text" value="{{$no_surat}}" autofocus>
                                             </div>
                                             @error('no_surat')
@@ -76,28 +76,6 @@
                                             @enderror
                                         </div>
                                     </div>
-
-                                    <div class="row mb-3">
-                                        <label class="col-sm-3 col-lg-3 col-form-label">Dari Perangkat Daerah</label>
-                                        <div class="col-sm-9 col-lg-9">
-
-                                            <select class="select_cari form-control" id="id_opd_fk"
-                                                    name="id_opd_fk">
-                                                @foreach($listPerangkat as $nama => $value)
-                                                    <option
-                                                        value={{$value}} {{$value==$id_opd_fk ? 'selected' : ''}}>{{$nama}}</option>
-                                                @endforeach
-                                            </select>
-
-
-                                            @error('id_opd_fk')
-                                            <div class="invalid-feedback">
-                                                {{$message}}
-                                            </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
                                     <div class="row mb-3">
                                         <label class="col-sm-3 col-lg-3 col-form-label">Kepada</label>
                                         <div class="col-sm-9 col-lg-9">

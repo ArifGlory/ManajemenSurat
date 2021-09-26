@@ -1,7 +1,46 @@
 function deleteDataTable(paramId, urlnya) {
     var id = paramId;
     var token = $('meta[name="csrf-token"]').attr('content');
+    var urlAJAX =  urlnya + '/' + id;
     Swal.fire({
+            title: "Yakin ingin menghapus data ini?",
+            text: "Data yang dihapus tidak dapat dikembalikan lagi!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-info",
+            cancelButtonClass: "btn-danger",
+            confirmButtonText: "Hapus",
+            cancelButtonText: "Tidak",
+            showLoaderOnConfirm: true,
+            allowOutsideClick: false,
+            preConfirm: () => {
+                return new Promise(function(resolve) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: urlAJAX,
+                        type: 'DELETE',
+                        success (res) {
+                            if (res.status) {
+                                Swal.fire("Terhapus!", res.pesan, "success");
+                                table.ajax.reload()
+                            } else {
+                                Swal.fire("Gagal menghapus!", res.pesan, "error");
+                            }
+                        },
+                        error (res) {
+                            console.log(res)
+                        }
+                    })
+                });
+            },
+        },
+    );
+
+
+
+   /* Swal.fire({
         title: 'Apakah anda ingin menghapus data ini',
         text: "Data yang anda hapus, tidak akan kembali",
         icon: 'warning',
@@ -23,6 +62,7 @@ function deleteDataTable(paramId, urlnya) {
                         "id": id,
                     },
                     success: function (response) {
+                        console.log(response);
                         if (response.status) {
                             reloadTable();
                             iziToast.success({
@@ -50,7 +90,7 @@ function deleteDataTable(paramId, urlnya) {
         } else if (result.dismiss === "cancel") {
             iziToast.info('data dibatalkan untuk dihapus', 'Info');
         }
-    });
+    });*/
 }
 
 

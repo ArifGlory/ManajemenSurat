@@ -14,7 +14,7 @@ class KodeQR extends Model
     protected $fillable = [
         'no_surat',
         'tgl_surat',
-        'id_opd_fk',
+        'status_surat',
         'kepada',
         'lampiran',
         'perihal',
@@ -46,7 +46,6 @@ class KodeQR extends Model
 
     public static $validationRule = [
         'tgl_surat' => 'required',
-        'id_opd_fk' => 'required',
         'kepada' => 'required',
         'lampiran' => 'required',
         'perihal' => 'required',
@@ -54,7 +53,6 @@ class KodeQR extends Model
     ];
 
     public static $attributeRule = [
-        'no_surat' => 'No Surat',
         'tgl_surat' => 'Tgl Surat',
         'id_opd_fk' => 'Pilih Perangkat Daerah',
         'kepada' => 'Tujuan Kepada',
