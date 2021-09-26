@@ -158,10 +158,10 @@
                                                                             Super Admin
                                                                         </option>
                                                                     @endif
-                                                                    <option
+                                                                    {{--<option
                                                                         value="admin" {{$level == 'admin' ? 'selected' : ''}}>
                                                                         Admin Bagian Kepegawaian dan Umum
-                                                                    </option>
+                                                                    </option>--}}
                                                                     <option
                                                                         value="umum" {{$level == 'umum' ? 'selected' : ''}}> <!-- ga ada pengaturan user -->
                                                                          User Bagian Kepegawaian dan Umum

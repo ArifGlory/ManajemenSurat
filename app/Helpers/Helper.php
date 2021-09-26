@@ -380,3 +380,42 @@ if (!function_exists('detectDelimiter')) {
         return array_search(max($delimiters), $delimiters);
     }
 }
+if (!function_exists('getNamaLevel')){
+    function getNamaLevel($kode_level){
+        $nama_level = "";
+        switch ($kode_level){
+            case "superadmin":
+                $nama_level = "Super Admin";
+                break;
+            case "admin":
+                $nama_level = "Admin Bagian Kepegawaian dan Umum";
+                break;
+            case "umum":
+                $nama_level = "User Bagian Kepegawaian dan Umum";
+                break;
+            case "subkoor_kepegawaian":
+                $nama_level = "Sub Koor Tata Usaha Kepegawaian";
+                break;
+            case "subkoor_organisasi":
+                $nama_level = "Sub Koor Organisasi dan Tata Laksana";
+                break;
+            case "subkoor_pengembangan":
+                $nama_level = "  Sub Koor Pengembangan Pegawai";
+                break;
+            case "subkoor_umum":
+                $nama_level = "   Sub Koor Umum";
+                break;
+            case "kabag":
+                $nama_level = "Kepala Bagian";
+                break;
+            case "seketaris":
+                $nama_level = "Seketaris Direktorat Jenderal Bina Marga";
+                break;
+            case "direktur":
+                $nama_level = "Direktur Jenderal Bina Marga";
+                break;
+        }
+
+        return $nama_level;
+    }
+}

@@ -7,12 +7,14 @@ use App\Models\JenisPenandatangan;
 use App\Models\KodeQR;
 use App\Models\Opd;
 use App\Models\PerangkatDaerah;
+use App\Models\User;
 use App\Models\ViewModel\v_bar_opd_tahunan;
 use App\Models\ViewModel\v_bar_penandatangan;
 use App\Models\ViewModel\v_bar_perangkat_daerah;
 use App\Models\ViewModel\v_bar_ttd_tahunan;
 use DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Image;
 use QrCode;
 use setasign\Fpdi\Tcpdf\Fpdi;
@@ -22,6 +24,7 @@ class KodeQRController extends Controller
 {
     public function index()
     {
+
         $data = [
             'listPerangkat' => PerangkatDaerah::pluck('id_opd', 'alias_opd')->all(),
             'listJenis' => JenisPenandatangan::pluck('id_jenis_ttd', 'jenis_ttd')->all()
@@ -210,6 +213,7 @@ class KodeQRController extends Controller
             'perihal' => $request->input('perihal'),
             'id_jenis_ttd_fk' => $request->input('id_jenis_ttd_fk'),
             'berkas' => $berkas,
+            'created_by'=>Auth::user()->id
             //'qrcode' => $nameFile
         );
 
@@ -458,6 +462,41 @@ class KodeQRController extends Controller
             'data_tahun' => KodeQR::tahun()->get(),
         ];
         return view('dashboard_page.perangkat-daerah.statistik', $data);
+    }
+
+    public function disposisi($id)
+    {
+        $checkData = KodeQR::find(Hashids::decode($id));
+        if (count($checkData) > 0) :
+            $dataMaster = $checkData[0];
+
+            $pembuat  = User::find($dataMaster->created_by);
+            $bidang_pembuat = getNamaLevel($pembuat->level);
+
+            $data =
+                [
+                    'id' => $id,
+                    'no_surat' => $dataMaster->no_surat,
+                    'tgl_surat' => TanggalIndo2($dataMaster->tgl_surat),
+                    //'tgl_masuk' => TanggalIndo2($dataMaster->tgl_masuk),
+                    'pengirim' => $dataMaster->pengirim,
+                    'perihal' => $dataMaster->perihal,
+                    'qrcode' => $dataMaster->qrcode,
+                    'berkas' => $dataMaster->berkas,
+                    'nama_pembuat'=>$pembuat->name,
+                    'bidang_pembuat'=>$bidang_pembuat,
+                    'listPerangkat' => PerangkatDaerah::pluck('id_opd', 'nama_opd')->all(),
+
+                ];
+            return view('dashboard_page.kodeqr.disposisi', $data);
+        else :
+            return redirect(route('surat-keluar'))
+                ->with('pesan_status', [
+                    'tipe' => 'error',
+                    'desc' => 'Surat  tidak ditemukan',
+                    'judul' => 'Halaman Surat Keluar'
+                ]);
+        endif;
     }
 
     public function tampil_grafik_pd(Request $request)

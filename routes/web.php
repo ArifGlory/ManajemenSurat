@@ -149,6 +149,17 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web', 'auth']], functio
         Route::get('get-dari/{id}', [DisposisiController::class, 'getdari']);
     });
 
+    Route::group(['prefix' => 'disposisi-surat-keluar', 'middleware' => ['seluruhlevel']], function () {
+        Route::get('/{id}', [KodeQRController::class, 'disposisi']);
+        Route::get('data/{id}', [KodeQRController::class, 'dataDisposisi']);
+
+        Route::delete('delete/{id}', [DisposisiController::class, 'destroy']);
+        Route::post('create', [DisposisiController::class, 'create']);
+        Route::get('edit/{id}', [DisposisiController::class, 'edit']);
+        Route::put('update/{id}', [DisposisiController::class, 'update']);
+        Route::get('get-dari/{id}', [DisposisiController::class, 'getdari']);
+    });
+
 
     Route::get('profil', [PenggunaController::class, 'profil'])->name('profil');
     Route::get('side-profil', [PenggunaController::class, 'sideProfil']);

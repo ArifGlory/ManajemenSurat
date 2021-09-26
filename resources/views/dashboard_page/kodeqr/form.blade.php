@@ -1,5 +1,5 @@
 @extends('mylayouts.app')
-@section('title', 'Form '.ucwords($mode).' Surat Keluar (QR)')
+@section('title', 'Form '.ucwords($mode).' Surat Keluar ')
 @push('vendor-css')
     <link rel="stylesheet" href="{{ assetku('magnific-popup/magnific-popup.min.css')}}">
     <link rel="stylesheet" href="{{assetku('assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css')}}">
@@ -18,11 +18,11 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>{{'Form '.ucwords($mode).' Surat Keluar (QR)'}}</h1>
+            <h1>{{'Form '.ucwords($mode).' Surat Keluar '}}</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="{{route('surat-keluar')}}">Daftar Surat Keluar (QR)</a></div>
-                <div class="breadcrumb-item active">{{'Form '.ucwords($mode).' Surat Keluar (QR)'}}</div>
+                <div class="breadcrumb-item"><a href="{{route('surat-keluar')}}">Daftar Surat Keluar </a></div>
+                <div class="breadcrumb-item active">{{'Form '.ucwords($mode).' Surat Keluar '}}</div>
             </div>
         </div>
         <div class="section-body">
@@ -209,12 +209,12 @@
                                     <img class="img-fluid"
                                          src="{{url('kodeqr/'.$qrcode)}}"
                                          alt="image">
-                                    <h2 class="mt-2 mb-4">Surat Keluar (QR) saat ini</h2>
+                                    <h2 class="mt-2 mb-4">Surat Keluar saat ini</h2>
                                 @else
                                     <img class="img-fluid"
                                          src="{{assetku('assets/img/drawkit/revenue-graph-colour.svg')}}"
                                          alt="image">
-                                    <h2 class="mt-2 mb-2">Isi Lengkap Data Surat Keluar (QR)</h2>
+                                    <h2 class="mt-2 mb-2">Isi Lengkap Data Surat Keluar </h2>
                                 @endif
 
                                 @if (count($errors) > 0)

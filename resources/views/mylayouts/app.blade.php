@@ -32,14 +32,10 @@
 @include('mylayouts.header')
 <!-- END: Header-->
 
-    @if(Auth::user()->level=='admin')
-        @include('mylayouts.menuadmin')
-    @elseif(Auth::user()->level=='umum')
-        @include('mylayouts.menuumum')
-    @elseif(Auth::user()->level=='disposisi')
-            @include('mylayouts.menudisposisi')
-    @else
+    @if(Auth::user()->level=='superadmin')
         @include('mylayouts.menu')
+    @else
+        @include('mylayouts.menu_semua_level')
     @endif;
 
 

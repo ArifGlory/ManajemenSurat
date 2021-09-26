@@ -1,5 +1,5 @@
 @extends('mylayouts.app')
-@section('title', 'Surat Keluar (QR)')
+@section('title', 'Surat Keluar ')
 @push('vendor-css')
     <!--begin::Page Vendors Styles(used by this page)-->
     <link rel="stylesheet" href="{{ assetku('magnific-popup/magnific-popup.min.css')}}">
@@ -14,7 +14,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Daftar Surat Keluar (QR)</h1>
+            <h1>Daftar Surat Keluar </h1>
             <div class="section-header-button">
                 <a href="{{ route('surat-keluar.form') }}"
                    class="btn btn-primary btn-sm"><i
@@ -24,7 +24,7 @@
             </div>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{route('dashboard')}}">Dashboard</a></div>
-                <div class="breadcrumb-item">Daftar Surat Keluar (QR)</div>
+                <div class="breadcrumb-item">Daftar Surat Keluar</div>
             </div>
         </div>
         <div class="section-body">

@@ -23,7 +23,6 @@ class HomeController extends Controller
         if (Auth::user()->level != 'disposisi') :
             $data = [
                 'jenisttd' => JenisPenandatangan::where('active', 1)->count(),
-                'perangkatdaerah' => PerangkatDaerah::where('active', 1)->count(),
                 'kodeqr' => KodeQR::count(),
                 'suratmasuk' => SuratMasuk::count(),
                 'signatureqr' => SignatureQR::count(),
@@ -31,7 +30,7 @@ class HomeController extends Controller
             ];
             return view('dashboard_page.dashboard', $data);
         else:
-            return redirect(route('surat-masuk'));
+            return redirect(route('surat-keluar'));
         endif;
     }
 }

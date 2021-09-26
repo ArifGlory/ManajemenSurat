@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="col-sm-12 order-sm-0 order-lg-1 order-xl-1">
-                    <a href="{{url('dashboard/disposisi/' . $id_surat)}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
+                    <a href="{{url('dashboard/disposisi-surat-keluar/' . Hashids::encode($id_surat))}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
                     <div id="tracking-pre"></div>
                     <div id="tracking" class="card">
                         <div class="text-center tracking-status-intransit">
