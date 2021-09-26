@@ -30,7 +30,12 @@ class PenggunaController extends Controller
             $page_count = $request->get('page_count');
             $countPaginate = $page_count == -1 ? User::count() : $page_count;
             if (Auth::user()->level == 'superadmin'):
-                $eloUser = User::perangkat()->whereIn('level', ['superadmin', 'admin', 'umum', 'disposisi','subkoor','kabag','seketaris','direktur']);
+                $eloUser = User::perangkat()->whereIn('level', ['superadmin', 'admin', 'umum', 'disposisi',
+                    'subkoor_kepegawaian',
+                    'subkoor_organisasi',
+                    'subkoor_pengembangan',
+                    'subkoor_umum',
+                    'kabag','seketaris','direktur']);
             else:
                 $eloUser = User::perangkat()->where('level', 'umum', 'disposisi','subkoor','kabag','seketaris','direktur');
             endif;
@@ -47,6 +52,10 @@ class PenggunaController extends Controller
                     $dataUser = $eloUser->paginate($countPaginate);
                 endif;
             endif;
+            foreach ($dataUser as $value){
+                $nama_level = $this->getNamaLevel($value->level);
+                $value->level = $nama_level;
+            }
 
             $data = [
                 "listPengguna" => $dataUser,
@@ -488,5 +497,43 @@ class PenggunaController extends Controller
                     'judul' => 'Data Profil'
                 ]);
         }
+    }
+
+    function getNamaLevel($kode_level){
+        $nama_level = "";
+        switch ($kode_level){
+            case "superadmin":
+                $nama_level = "Super Admin";
+                break;
+            case "admin":
+                $nama_level = "Admin Bagian Kepegawaian dan Umum";
+                break;
+            case "umum":
+                $nama_level = "User Bagian Kepegawaian dan Umum";
+                break;
+            case "subkoor_kepegawaian":
+                $nama_level = "Sub Koor Tata Usaha Kepegawaian";
+                break;
+            case "subkoor_organisasi":
+                $nama_level = "Sub Koor Organisasi dan Tata Laksana";
+                break;
+            case "subkoor_pengembangan":
+                $nama_level = "  Sub Koor Pengembangan Pegawai";
+                break;
+            case "subkoor_umum":
+                $nama_level = "   Sub Koor Umum";
+                break;
+            case "kabag":
+                $nama_level = "Kepala Bagian";
+                break;
+            case "seketaris":
+                $nama_level = "Seketaris Direktorat Jenderal Bina Marga";
+                break;
+            case "direktur":
+                $nama_level = "Direktur Jenderal Bina Marga";
+                break;
+        }
+
+        return $nama_level;
     }
 }

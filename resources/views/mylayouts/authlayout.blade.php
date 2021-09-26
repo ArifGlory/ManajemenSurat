@@ -49,7 +49,7 @@
                     <div class="text-light p-5 pb-2">
                         <div class="mb-5 pb-3">
                             <h1 class="mb-2 display-4 font-weight-bold"> Manajemen dan Monitoring Surat Keluar </h1>
-                            <h5 class="font-weight-normal text-muted-transparent">{{getSetting('alamat')}}</h5>
+                            <h5 class="font-weight-normal text-muted-transparent">Dirjen Bina Marga,  Bagian Umum dan Kepegawaian</h5>
                         </div>
                     </div>
                 </div>

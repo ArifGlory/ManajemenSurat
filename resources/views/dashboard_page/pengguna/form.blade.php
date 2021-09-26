@@ -166,9 +166,18 @@
                                                                         value="umum" {{$level == 'umum' ? 'selected' : ''}}> <!-- ga ada pengaturan user -->
                                                                          User Bagian Kepegawaian dan Umum
                                                                     </option>
-                                                                    <option value="subkoor" {{$level == 'subkoor' ? 'selected' : ''}}>
-                                                                            Sub Koor
+                                                                    <option value="subkoor_kepegawaian" {{$level == 'subkoor_kepegawaian' ? 'selected' : ''}}>
+                                                                        Sub Koor Tata Usaha Kepegawaian
                                                                     </option>
+                                                                        <option value="subkoor_organisasi" {{$level == 'subkoor_organisasi' ? 'selected' : ''}}>
+                                                                            Sub Koor Organisasi dan Tata Laksana
+                                                                        </option>
+                                                                        <option value="subkoor_pengembangan" {{$level == 'subkoor_pengembangan' ? 'selected' : ''}}>
+                                                                            Sub Koor Pengembangan Pegawai
+                                                                        </option>
+                                                                        <option value="subkoor_umum" {{$level == 'subkoor_umum' ? 'selected' : ''}}>
+                                                                            Sub Koor Umum
+                                                                        </option>
                                                                         <option value="kabag" {{$level == 'kabag' ? 'selected' : ''}}>
                                                                             Kepala Bagian
                                                                         </option>

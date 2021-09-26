@@ -1,5 +1,7 @@
 @if(count($listPengguna)>0)
-    @php $no = ($listPengguna->currentpage()-1)* $listPengguna->perpage() + 1;@endphp
+    @php $no = ($listPengguna->currentpage()-1)* $listPengguna->perpage() + 1;
+
+    @endphp
     <div class="card card-success">
         <div class="card-body">
             <ul class="list-unstyled user-progress list-unstyled-border list-unstyled-noborder">
@@ -20,7 +22,7 @@
                                 <div class="col-md-5">
                                     <div class="media-title">{{$dataPengguna->name}}</div>
                                     <div class="text-muted">{{$dataPengguna->email}}</div>
-                                    <div class="text-muted">{{$dataPengguna->username}}</div>
+                                    <div class="text-muted">username :  {{$dataPengguna->username}}</div>
                                 </div>
                                 <div class="col-md-7">
                                     <div class="form-group row m-0">
@@ -30,15 +32,6 @@
                                                 class="form-control-plaintext font-weight-bolder">{{$dataPengguna->level}}</span>
                                         </div>
                                     </div>
-                                    @if($dataPengguna->id_opd_fk!='')
-                                        <div class="form-group row m-0">
-                                            <label class="col-4 col-form-label">Bidang </label>
-                                            <div class="col-8">
-                                                <span
-                                                    class="form-control-plaintext font-weight-bolder">{{$dataPengguna->nama_opd}}</span>
-                                            </div>
-                                        </div>
-                                    @endif
                                     <div class="form-group row m-0">
                                         <label class="col-4 col-form-label">Status Akun:</label>
                                         <div class="col-8">
