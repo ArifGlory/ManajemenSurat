@@ -36,7 +36,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Tanggal Surat Diterima</th>
-                                    <th>status_disposisi</th>
+                                    <th>Status Disposisi</th>
                                     <th>Disposisikan Kepada</th>
                                     <th>Catatan Disposisi</th>
                                     <th>Actions</th>
@@ -142,17 +142,17 @@
 
                             <div class="col-12">
                                 <div class="form-group row">
-                                    <div class="col-sm-3 col-form-label">
+                                    {{--<div class="col-sm-3 col-form-label">
                                         <label>Tanggal Surat Diterima</label>
-                                    </div>
+                                    </div>--}}
                                     <div class="col-sm-9">
                                         <input type="hidden" id="id" class="form-control"
                                                name="id">
-                                        <input type="hidden" id="id_sm_fk" class="form-control"
-                                               name="id_sm_fk" readonly value="{{$id}}">
+                                        <input type="hidden" id="id_surat_keluar" class="form-control" value="{{$id}}"
+                                               name="id_surat_keluar">
                                         <input
-                                            class="form-control datetimepickerindo"
-                                            name="tgl_masuk" id="tgl_masuk" type="text" value="{{date('d/m/Y H:i')}}"/>
+                                            class=""
+                                            name="tgl_masuk" id="tgl_masuk" type="hidden" value="{{date('d/m/Y H:i')}}"/>
                                         <div class="invalid-feedback" id="error_tgl_masuk">
                                         </div>
                                     </div>
@@ -162,19 +162,19 @@
                             <div class="col-12">
                                 <div class="form-group row">
                                     <div class="col-sm-3 col-form-label">
-                                        <label>status_disposisi</label>
+                                        <label>Status Disposisi</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <select class="form-control" id="status_disposisi"
                                                 name="status_disposisi">
-                                            <option value="diteruskan">
-                                                Diteruskan
+                                            <option value="DITERUSKAN">
+                                                DITERUSKAN
                                             </option>
-                                            <option value="dihimpun">
-                                                Dihimpun
+                                            <option value="DIKEMBALIKAN">
+                                                DIKEMBALIKAN
                                             </option>
-                                            <option value="tindak lanjut">
-                                                Tindak Lanjut
+                                            <option value="TINDAK LANJUT">
+                                                TINDAK LANJUT
                                             </option>
                                         </select>
                                         <div class="invalid-feedback" id="error_status_disposisi">
@@ -191,10 +191,31 @@
                                     <div class="col-sm-9">
                                         <select class="select_cari form-control" id="kepada"
                                                 name="kepada">
-                                            @foreach($listPerangkat as $nama => $value)
-                                                <option
-                                                    value="{{$nama}}">{{$nama}}</option>
-                                            @endforeach
+                                            <option
+                                                value="umum">
+                                                User Bagian Kepegawaian dan Umum
+                                            </option>
+                                            <option value="subkoor_kepegawaian">
+                                                Sub Koor Tata Usaha Kepegawaian
+                                            </option>
+                                            <option value="subkoor_organisasi">
+                                                Sub Koor Organisasi dan Tata Laksana
+                                            </option>
+                                            <option value="subkoor_pengembangan">
+                                                Sub Koor Pengembangan Pegawai
+                                            </option>
+                                            <option value="subkoor_umum">
+                                                Sub Koor Umum
+                                            </option>
+                                            <option value="kabag">
+                                                Kepala Bagian
+                                            </option>
+                                            <option value="seketaris">
+                                                Seketaris Direktorat Jenderal Bina Marga
+                                            </option>
+                                            <option value="direktur">
+                                                Direktur Jenderal Bina Marga
+                                            </option>
                                         </select>
                                         <div class="invalid-feedback" id="error_kepada">
                                         </div>
@@ -274,7 +295,7 @@
                 order: [[1, "asc"]],
                 {{--ajax: "{{ route('disposisi.data') }}",--}}
                 ajax: {
-                    url: "{{ url('dashboard/disposisi/data/'.$id) }}",
+                    url: "{{ url('dashboard/disposisi-surat-keluar/data/'.$id) }}",
                     type: "GET",
                 },
                 columns: [
@@ -322,13 +343,13 @@
         });
 
         function deleteData(paramId) {
-            var url = '{{ url('dashboard/disposisi/delete/') }}';
+            var url = '{{ url('dashboard/disposisi-surat-keluar/delete/') }}';
             deleteDataTable(paramId, url);
         }
 
 
         function bulkDelete() {
-            var url = '{{ url('dashboard/disposisi/bulkDelete/') }}';
+            var url = '{{ url('dashboard/disposisi-surat-keluar/bulkDelete/') }}';
             bulkDeleteTable(url)
         }
 
@@ -360,24 +381,13 @@
             $('#btnbatal').hide();
         }
 
-        function getpenerima() {
-            var urlData = "{{ url('dashboard/disposisi/get-penerima/'.$id) }}";
-            $.ajax({
-                url: urlData,
-                type: "GET",
-                success: function (data) {
-                    $('[name="penerima"]').val(data).trigger('change');
-                }
-            });
-        }
 
         function initClick() {
             $(".clickable-edit").click(function () {
                 save_method = 'update';
                 id = $(this).attr('data-id');
                 tgl_masuk = $(this).attr('data-tgl_masuk');
-                //id_sm_fk = $(this).attr('data-id_sm_fk');
-                penerima = $(this).attr('data-penerima');
+                id_surat_keluar = $(this).attr('data-id_surat_keluar');
                 kepada = $(this).attr('data-kepada');
                 catatan_disposisi = $(this).attr('data-catatan_disposisi');
                 status_disposisi = $(this).attr('data-status_disposisi');
@@ -388,6 +398,7 @@
                 $('#modal_form').appendTo("body");
                 $('#modal_form').modal('show'); // sh
                 $('[name="id"]').val(id);
+                $('[name="id_surat_keluar"]').val(id_surat_keluar);
                 $('[name="tgl_masuk"]').val(tgl_masuk);
                 console.log(tgl_masuk);
                 //$('[name="id_sm_fk"]').val(id_sm_fk);
@@ -411,11 +422,11 @@
             var formData = new FormData($('#form')[0]);
             if (save_method == 'add') {
                 id = '';
-                url = "{{ url('dashboard/disposisi/create/') }}";
+                url = "{{ url('dashboard/disposisi-surat-keluar/create/') }}";
                 _method = "POST";
             } else {
                 id = $('[name="id"]').val();
-                url = '{{ url('dashboard/disposisi/update/') }}' + '/' + id;
+                url = '{{ url('dashboard/disposisi-surat-keluar/update/') }}' + '/' + id;
                 _method = "PUT";
                 formData.append('_method', 'PUT');
             }
@@ -433,7 +444,8 @@
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    if (data.status_disposisi) //if success close modal and reload ajax table
+                    console.log(data);
+                    if (data.status) //if success close modal and reload ajax table
                     {
                         if (save_method == 'add') {
                             reloadTable();

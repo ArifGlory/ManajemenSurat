@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
+use App\Models\DisposisiSuratKeluar;
 use App\Models\JenisPenandatangan;
 use App\Models\KodeQR;
 use App\Models\Opd;
@@ -182,7 +183,7 @@ class KodeQRController extends Controller
     {
         $rule = KodeQR::$validationRule;
         if ($request->hasFile('berkas')) {
-            $rule['berkas'] = 'max:1024|mimes:pdf';
+            $rule['berkas'] = 'max:5000|mimes:pdf';
         }
         $this->validate($request,
             $rule,
@@ -220,7 +221,8 @@ class KodeQRController extends Controller
         $insert = KodeQR::create($dataCreate);
 
         $nameFile = round(microtime(true) * 1000) . '.svg';
-        $generator = url('cek-qr/' . Hashids::encode($insert->id_qr));
+        $generator = url('detail-surat-keluar/' . Hashids::encode($insert->id_qr));
+        dd($generator);
         QrCode::size(500)->format('svg')->generate($generator, base_path('kodeqr/' . $nameFile));
         $dataMaster = KodeQR::find($insert->id_qr);
         $dataUpdate = [
@@ -497,6 +499,61 @@ class KodeQRController extends Controller
                     'judul' => 'Halaman Surat Keluar'
                 ]);
         endif;
+    }
+
+    public function dataDisposisi(Request $request, $id)
+    {
+        $data = DisposisiSuratKeluar::where('id_surat_keluar', Hashids::decode($id)[0]);
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->editColumn('tgl_masuk', function ($row) {
+                return TanggalIndowaktu($row->tgl_masuk);
+            })
+            ->editColumn('kepada', function ($row) {
+                $kepada = $row->kepada;
+                $nama_level = getNamaLevel($kepada);
+                return $nama_level;
+            })
+            ->editColumn('status_disposisi', function ($row) {
+                if ($row->status == 'DITERUSKAN'):
+                    $active = '<div class="text-primary font-weight-bolder"> DITERUSKAN </div>';
+                elseif ($row->status == 'DIKEMBALIKAN'):
+                    $active = '<div class="text-dark font-weight-bolder"> DIKEMBALIKAN </div>';
+                else:
+                    $active = '<div class="text-success font-weight-bolder"> TINDAK LANJUT </div>';
+                endif;
+                return $active;
+            })
+            ->addColumn('action', function ($row) {
+
+                $btn = '<div class="btn-group" role="group" aria-label="First group">';
+
+                $editaksi = '<a href="javascript:void(0)" class="btn btn-sm btn-icon btn-success waves-effect clickable-edit" title="Edit"
+                                                       data-id="' . Hashids::encode($row->id) . '"
+                                                       data-id_surat_keluar="' . Hashids::encode($row->id_surat_keluar) . '"
+                                                       data-tgl_masuk="' . TanggalIndowaktu($row->tgl_masuk) . '"
+                                                       data-kepada="' . $row->kepada . '"
+                                                       data-catatan_disposisi="' . $row->catatan_disposisi . '"
+                                                       data-status_disposisi="' . $row->status_disposisi . '"
+                                                       ><i class="fa fa-edit"></i></a>';
+                $deleteaksi = '<a href="javascript:void(0)" onclick="deleteData(' . "'" . Hashids::encode($row->id) . "'" . ')" class="btn btn-sm btn-icon btn-danger waves-effect" title="Hapus"><i class="fa fa-trash"></i></a>';
+                if (Auth::user()->level == 'superadmin') {
+                    $btn .= $editaksi;
+                    $btn .= $deleteaksi;
+                } else {
+                    if ($row->created_by == Auth::user()->id) {
+                        $btn .= $editaksi;
+                        $btn .= $deleteaksi;
+                    } else {
+                        $btn .= '-';
+                    }
+                }
+                $btn .= '</div>';
+                return $btn;
+
+            })
+            ->escapeColumns([])
+            ->toJson();
     }
 
     public function tampil_grafik_pd(Request $request)

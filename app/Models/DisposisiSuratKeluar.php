@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Disposisi extends Model
+class DisposisiSuratKeluar extends Model
 {
     use HasFactory;
 
     protected $table = 'detail_surat_keluar';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'id_surat_keluar',
         'tgl_masuk',
         'kepada',
         'catatan_disposisi',
@@ -28,13 +29,13 @@ class Disposisi extends Model
     public static $validationRule = [
         'tgl_masuk' => 'required',
         'kepada' => 'required',
-        'status' => 'required',
+        'status_disposisi' => 'required',
     ];
 
     public static $attributeRule = [
         'tgl_masuk' => 'Tanggal Masuk Surat',
         'kepada' => 'Pejabat / Perangkat Daerah',
-        'status' => 'Status Disposisi',
+        'status_disposisi' => 'Status Disposisi',
     ];
 
 //    public function scopeSuratmasuk($query)

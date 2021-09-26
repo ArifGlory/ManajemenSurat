@@ -39,11 +39,11 @@ class AuthenticatedSessionController extends Controller
         elseif ($level == 'admin') :
             return redirect()->intended(RouteServiceProvider::HOME);
         elseif ($level == 'umum') :
-            return redirect()->intended('dashboard/surat-masuk');
+            return redirect()->intended(RouteServiceProvider::HOME);
         elseif ($level == 'disposisi') :
 //            $referer = request()->headers->get('referer');
 //            if($referer=='')
-            return redirect()->intended('dashboard/surat-masuk');
+            return redirect()->intended(RouteServiceProvider::HOME);
         else :
             return redirect('/');
         endif;
