@@ -120,12 +120,15 @@
 
                 </div>
                 <div class="col-sm-12 order-sm-0 order-lg-1 order-xl-1">
-                    @if(Auth::user()->level == $listDetail[0]->kode_level)
-                        <button onclick="add()" class="btn btn-primary text-right mb-3"><i class="fas fa-check"></i> Tanda Tangani</button>
-                        <a href="{{url('dashboard/disposisi-surat-keluar/' . Hashids::encode($id_surat))}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
-                    @else
-                        <a href="{{url('dashboard/disposisi-surat-keluar/' . Hashids::encode($id_surat))}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
+                    @if($status_surat != "FINAL")
+                        @if(Auth::user()->level == $listDetail[0]->kode_level)
+                            <button onclick="add()" class="btn btn-primary text-right mb-3"><i class="fas fa-check"></i> Tanda Tangani</button>
+                            <a href="{{url('dashboard/disposisi-surat-keluar/' . Hashids::encode($id_surat))}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
+                        @else
+                            <a href="{{url('dashboard/disposisi-surat-keluar/' . Hashids::encode($id_surat))}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
+                        @endif
                     @endif
+
 
                     <div id="tracking-pre"></div>
                     <div id="tracking" class="card">
@@ -163,9 +166,16 @@
                                             </div>
                                             <div class="tracking-date">{{TanggalIndoSimple($dt->tgl_masuk)}}
                                                 <span>{{waktuaja($dt->tgl_masuk)}}</span></div>
-                                            <div class="tracking-content">{!! $status !!} Kepada  {{$dt->kepada}}
-                                                <span>Catatan Disposisi : {{($dt->catatan_disposisi)}}</span>
-                                            </div>
+                                            @if($dt->status_disposisi=='TINDAK LANJUT')
+                                                <div class="tracking-content">{!! $status !!}
+                                                    <span>Catatan Disposisi : {{($dt->catatan_disposisi)}}</span>
+                                                </div>
+                                            @else
+                                                <div class="tracking-content">{!! $status !!} Kepada  {{$dt->kepada}}
+                                                    <span>Catatan Disposisi : {{($dt->catatan_disposisi)}}</span>
+                                                </div>
+                                            @endif
+
                                         </div>
                                     @endforeach
                                 @endif

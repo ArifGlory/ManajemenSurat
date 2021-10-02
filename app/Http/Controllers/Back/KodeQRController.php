@@ -476,6 +476,26 @@ class KodeQRController extends Controller
             // Output the new PDF
             $pdf->Output(base_path('berkas/') . $surat_keluar->berkas, "F");
 
+
+            //update status nya
+            $dataUpdate = [
+                'status_surat' => "FINAL"
+            ];
+            //simpan perubahan
+            $update = $surat_keluar->update($dataUpdate);
+
+            //simpan log disposisi telah di ttd
+            $dataInput = [
+                'id_surat_keluar' => $id_qr,
+                'tgl_masuk' => date("Y-m-d H:i:s"),
+                'kepada' => "-",
+                'catatan_disposisi' => "Ditandatangani oleh  ".$user->name,
+                'status_disposisi' => "TINDAK LANJUT",
+                'created_by' => Auth::user()->id,
+                'updated_by' => Auth::user()->id,
+            ];
+            $insert = DisposisiSuratKeluar::create($dataInput);
+
             $cek = true;
         }else{
            $cek = false;
