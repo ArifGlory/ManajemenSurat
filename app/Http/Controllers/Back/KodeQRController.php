@@ -16,6 +16,7 @@ use App\Models\ViewModel\v_bar_ttd_tahunan;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Image;
 use QrCode;
 use setasign\Fpdi\Tcpdf\Fpdi;
@@ -440,6 +441,53 @@ class KodeQRController extends Controller
 //        $pdf->setSi
 
         $pdf->Output(base_path('berkas/') . $filePath, "F");
+    }
+
+    function finishSurat(Request $request){
+        //finish status surat nya, dan kasih footer signed
+        $id_qr = $request->input('id_qr');
+        $password = $request->input('password');
+
+        $surat_keluar = KodeQR::find($id_qr);
+        $user = User::find(Auth::user()->id);
+        if (Hash::check($password, $user->password)) {
+            $pdf = new FPDI('P', 'mm', 'A4');
+            $pages = $pdf->setSourceFile(base_path('berkas/' . $surat_keluar->berkas));
+
+            for ($i = 1; $i <= $pages; $i++) {
+                // import a page
+                $pdf->AddPage();
+                $page = $pdf->importPage($i);
+                $size = $pdf->getTemplateSize($i);
+              //  $templateId = $pdf->importPage($i);
+                // get the size of the imported page
+             //   $size = $pdf->getTemplateSize($templateId);
+
+                // use the imported page
+              //  $pdf->useTemplate($templateId);
+                $pdf->useTemplate($page, 0, 0);
+
+                $y = $size['height'] - 20;
+                $pdf->SetFont('Helvetica');
+                $pdf->SetFontSize(5);
+                $pdf->SetXY(5,0);
+                $pdf->Write(5, "Dokumen Telah Ditandatangi Secara Digital Oleh Dirjen Bina Marga RI");
+            }
+            // Output the new PDF
+            $pdf->Output(base_path('berkas/') . $surat_keluar->berkas, "F");
+
+            $cek = true;
+        }else{
+           $cek = false;
+        }
+
+        if ($cek) {
+            saveLogs('finish surat '.$surat_keluar->perihal);
+            return Respon('', true, 'Berhasil Finish Surat', 200);
+        } else {
+            return Respon('', false, 'Gagal finish surat', 200);
+        }
+
     }
 
     public function statistik_tanda_tangan()

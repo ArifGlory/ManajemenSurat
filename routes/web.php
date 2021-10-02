@@ -100,6 +100,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['web', 'auth']], functio
         Route::get('edit/{id}', [KodeQRController::class, 'edit']);
         Route::get('print/{id}', [KodeQRController::class, 'print']);
         Route::put('update/{id}', [KodeQRController::class, 'update']);
+        Route::post('finish-surat', [KodeQRController::class, 'finishSurat']);
         Route::get('statistik-tanda-tangan', [KodeQRController::class, 'statistik_tanda_tangan']);
         Route::get('grafik-statistik-tanda-tangan', [KodeQRController::class, 'tampil_grafik_ttd']);
     });

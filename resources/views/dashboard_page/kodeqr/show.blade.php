@@ -245,5 +245,55 @@
             $('.form-control').removeClass('is-invalid'); // clear error class
             $('.invalid-feedback').empty(); // clear error string
         }
+
+        function save() {
+            var url;
+            var _method;
+            var id;
+            var formData = new FormData($('#form')[0]);
+            id = '';
+            url = "{{ url('dashboard/surat-keluar/finish-surat') }}";
+            _method = "POST";
+
+            var token = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                url: url,
+                type: 'POST',
+                data: formData,
+                dataType: "JSON",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log(data);
+                    if (data.status) //if success close modal and reload ajax table
+                    {
+                        iziToast.success({
+                            title: 'Sukses',
+                            message: 'Berhasil Finish Surat',
+                            position: 'topRight'
+                        });
+                        $('#modal_form').modal('hide');
+                        location.reload();
+                    } else {
+                        iziToast.error({
+                            title: 'Gagal',
+                            message: 'Konfirmasi Password anda salah',
+                            position: 'topRight'
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: xhr.responseText,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
     </script>
 @endpush
