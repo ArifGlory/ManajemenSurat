@@ -119,9 +119,14 @@
                     </div>
 
                 </div>
-
                 <div class="col-sm-12 order-sm-0 order-lg-1 order-xl-1">
-                    <a href="{{url('dashboard/disposisi-surat-keluar/' . Hashids::encode($id_surat))}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
+                    @if(Auth::user()->level == $listDetail[0]->kode_level)
+                        <button onclick="add()" class="btn btn-primary text-right mb-3"><i class="fas fa-check"></i> Tanda Tangani</button>
+                        <a href="{{url('dashboard/disposisi-surat-keluar/' . Hashids::encode($id_surat))}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
+                    @else
+                        <a href="{{url('dashboard/disposisi-surat-keluar/' . Hashids::encode($id_surat))}}" class="btn btn-success text-right mb-3" target="_blank"><i class="fas fa-edit"></i> Form Disposisi</a>
+                    @endif
+
                     <div id="tracking-pre"></div>
                     <div id="tracking" class="card">
                         <div class="text-center tracking-status-intransit">
@@ -133,13 +138,13 @@
                                     @foreach($listDetail as $dt)
                                         @php
 
-                                            if($dt->status=='diteruskan'):
+                                            if($dt->status_disposisi=='DITERUSKAN'):
                                                 $status = '<label class="font-weight-bolder text-primary">DITERUSKAN</label>';
                                                 $class_status = 'inforeceived';
-                                            elseif($dt->status=='dikembalikan'):
+                                            elseif($dt->status_disposisi=='DIKEMBALIKAN'):
                                                 $status = '<label class="font-weight-bolder text-dark">DIKEMBALIKAN</label>';
                                                 $class_status = 'deliveryoffice';
-                                            elseif($dt->status=='tindak lanjut'):
+                                            elseif($dt->status_disposisi=='TINDAK LANJUT'):
                                                 $status = '<label class="font-weight-bolder text-success">TINDAK LANJUT</label>';
                                                 $class_status = 'delivered';
                                             else:
@@ -158,8 +163,7 @@
                                             </div>
                                             <div class="tracking-date">{{TanggalIndoSimple($dt->tgl_masuk)}}
                                                 <span>{{waktuaja($dt->tgl_masuk)}}</span></div>
-                                            <div class="tracking-content">Surat Diterima {{$dt->kepada}}
-                                                <span>{!! $status !!} kepada {{$dt->kepada}}</span>
+                                            <div class="tracking-content">{!! $status !!} Kepada  {{$dt->kepada}}
                                                 <span>Catatan Disposisi : {{($dt->catatan_disposisi)}}</span>
                                             </div>
                                         </div>
@@ -173,7 +177,73 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal -->
+    <div
+        class="modal fade"
+        id="modal_form"
+
+        role="dialog"
+        aria-labelledby="exampleModalScrollableTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <form class="form form-horizontal" id="form" name="form" method="post"
+                      enctype="multipart/form-data" action="javascript:save();">
+                    <div class="modal-header bg-dark text-white" style="padding-top: 10px; padding-bottom: 10px">
+                        <h6 class="modal-title" id="judul">Tanda Tangani Surat</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+
+
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div class="text-left">
+                                        <input type="hidden" id="id_qr" class="form-control" value="{{$id_surat}}" name="id_qr">
+                                        <label>Konfirmasi Password</label>
+                                        <input required class="form-control" type="password" name="password" placeholder="Konfirmasi Password anda">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <p class="font-italic">Dengan menekan tombol submit, surat akan ditandatangani secara digital, dan status surat akan diubah menjadi <strong>FINAL</strong> </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-whitesmoke">
+                        <button type="submit" id="btnsave"
+                                class="btn btn-primary mr-1 waves-effect waves-float waves-light">
+                            <i class="fa fa-save"></i> <span id="teksSimpan"> Submit</span>
+                        </button>
+                        <button type="button" id="btnbatal" onclick="add()"
+                                class="btn btn-outline-secondary waves-effect"
+                                style="display: none">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('scripts')
     <script src="{{ assetku('assets/jshideyorix/general.js')}}"></script>
+    <script>
+        function add() {
+            $('#modal_form').modal();
+            $('#modal_form').appendTo("body");
+            $('#modal_form').modal('show'); // show bootstrap modal
+            save_method = 'add';
+            $('#form')[0].reset(); // reset form on modals
+            $('.form-control').removeClass('is-invalid'); // clear error class
+            $('.invalid-feedback').empty(); // clear error string
+        }
+    </script>
 @endpush

@@ -18,6 +18,7 @@ class JenisPenandatangan extends Model
         'nama_pejabat',
         'nip_pejabat',
         'active',
+        'id_user',
         'created_by',
         'updated_by',
         'deleted_at',

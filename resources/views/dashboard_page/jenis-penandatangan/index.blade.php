@@ -43,6 +43,7 @@
                             <th width="">Jenis Penandatangan</th>
                             <th width="">Nama Pejabat</th>
                             <th width="">NIP</th>
+                            <th width="">Username</th>
                             <th width="15%">Status</th>
                             <th width="10%">Actions</th>
                         </tr>
@@ -157,6 +158,27 @@
                                 </div>
                             </div>
 
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <div class="col-sm-3 col-form-label">
+                                        <label>Akun Pengguna</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <select class="form-control select_sm" id="id_user"
+                                                name="id_user">
+                                            @foreach($list_user as $val)
+                                                <option value="{{$val->id}}">
+                                                    {{$val->username}} - {{$val->name}}
+                                                </option>
+                                            @endforeach
+
+                                        </select>
+                                        <div class="invalid-feedback" id="error_active">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             {{--<div class="col-12">
                                 <div class="form-group row">
                                     <div class="col-sm-3 col-form-label">
@@ -258,6 +280,7 @@
                     {data: 'jenis_ttd', name: 'jenis_ttd', responsivePriority: -1},
                     {data: 'nama_pejabat', name: 'nama_pejabat', responsivePriority: -1},
                     {data: 'nip_pejabat', name: 'nip_pejabat', responsivePriority: -1},
+                    {data: 'username', name: 'username', responsivePriority: -1},
                     {
                         data: 'active',
                         name: 'active',
@@ -339,6 +362,7 @@
                 jenis_ttd = $(this).attr('data-jenis_ttd');
                 nama_pejabat = $(this).attr('data-nama_pejabat');
                 nip_pejabat = $(this).attr('data-nip_pejabat');
+                id_user = $(this).attr('data-id_user');
               //  cert = $(this).attr('data-cert');
                 privKey = $(this).attr('data-priv');
                 active = $(this).attr('data-active');
@@ -354,6 +378,7 @@
                 $('[name="nip_pejabat"]').val(nip_pejabat);
                 $('[name="categorys_seotitle"]').val(categorys_seotitle);
                 $('[name="active"]').val(active);
+                $('[name="id_user"]').val(id_user);
                 $('#judul').text('FORM UBAH JENIS PENANDATANGAN'); // Set Title to Bootstrap modal titlep modal title
                 $('#teksSimpan').text('Simpan Perubahan');
                // $('#cert-text').text(cert);

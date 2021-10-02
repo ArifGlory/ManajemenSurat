@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
 use App\Models\JenisPenandatangan;
+use App\Models\User;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,12 +16,16 @@ class JenisPenandatanganController extends Controller
 {
     public function index()
     {
-        return view('dashboard_page.jenis-penandatangan.index');
+        $list_level_ttd = array('seketaris','kabag','direktur');
+        $list_user = User::whereIn('level',$list_level_ttd)->get();
+
+        return view('dashboard_page.jenis-penandatangan.index',compact('list_user'));
     }
 
     public function data(Request $request)
     {
-        $data = JenisPenandatangan::select('*');
+        $data = JenisPenandatangan::select('tbl_jenis_ttd.*','users.username')
+            ->leftJoin('users','users.id','=','tbl_jenis_ttd.id_user');
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($row) {
@@ -41,6 +46,7 @@ class JenisPenandatanganController extends Controller
                 data-jenis_ttd="' . $row->jenis_ttd . '"
                 data-nama_pejabat="' . $row->nama_pejabat . '"
                 data-nip_pejabat="' . $row->nip_pejabat . '"
+                data-id_user="' . $row->id_user . '"
                 data-active="' . $row->active . '"><i class="fa fa-edit"></i></button>';
                 $btn .= '<a href="javascript:void(0)" onclick="deleteData(' . "'" . Hashids::encode($row->id_jenis_ttd) . "'" . ')" class="btn btn-sm btn-icon btn-danger waves-effect" title="Hapus"><i class="fa fa-trash"></i></button>';
                 $btn .= '</div>';
@@ -76,6 +82,7 @@ class JenisPenandatanganController extends Controller
         $jenis_ttd = $request->input('jenis_ttd');
         $nama_pejabat = $request->input('nama_pejabat');
         $nip_pejabat = $request->input('nip_pejabat');
+        $id_user = $request->input('id_user');
 
         //validasi
         $data = [];
@@ -128,6 +135,7 @@ class JenisPenandatanganController extends Controller
                 'jenis_ttd' => $jenis_ttd,
                 'nama_pejabat' => $nama_pejabat,
                 'nip_pejabat' => $nip_pejabat,
+                'id_user' => $id_user,
                 'created_by' => Auth::user()->id,
                 'updated_by' => Auth::user()->id,
             ];
@@ -165,6 +173,7 @@ class JenisPenandatanganController extends Controller
         $dataMaster = JenisPenandatangan::find($idDecode);
         $active = $request->input('active');
         $jenis_ttd = $request->input('jenis_ttd');
+        $id_user = $request->input('id_user');
         //validasi
         $data = [];
         $data['error_string'] = [];
@@ -225,6 +234,7 @@ class JenisPenandatanganController extends Controller
             $dataUpdate = [
                 'active' => $active,
                 'jenis_ttd' => $jenis_ttd,
+                'id_user' => $id_user,
                 'updated_by' => Auth::user()->id,
             ];
             if($request->hasFile('cert')) {

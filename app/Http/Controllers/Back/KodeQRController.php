@@ -30,6 +30,7 @@ class KodeQRController extends Controller
             'listPerangkat' => PerangkatDaerah::pluck('id_opd', 'alias_opd')->all(),
             'listJenis' => JenisPenandatangan::pluck('id_jenis_ttd', 'jenis_ttd')->all()
         ];
+
         return view('dashboard_page.kodeqr.index', $data);
     }
 
@@ -48,6 +49,13 @@ class KodeQRController extends Controller
             $tgl_mulaiFormat = ubahformatTgl($tgl_mulai);
             $tgl_akhirFormat = ubahformatTgl($tgl_akhir);
             $data = $data->whereBetween('tgl_surat', [$tgl_mulaiFormat, $tgl_akhirFormat]);
+        endif;
+
+        if (Auth::user()->level == 'superadmin' && 'umum'):
+           //bisa lihat semua
+        else:
+            $cekDataIdSuratKeluar = DisposisiSuratKeluar::where('kepada', Auth::user()->level)->get(['id_surat_keluar'])->pluck('id_surat_keluar')->toArray();
+            $data = $data->where('id_qr', $cekDataIdSuratKeluar);
         endif;
 
         return Datatables::of($data)
@@ -85,8 +93,10 @@ class KodeQRController extends Controller
                 $btn .= '<a href="' . url('kodeqr/' . $row->qrcode) . '" class="btn btn-sm btn-icon btn-info waves-effect" target="_blank" title="Download"><i class="fa fa-download"></i></a>';
                 $btn .= '<a href="' . url('dashboard/surat-keluar/print/' . Hashids::encode($row->id_qr)) . '" target="_blank" class="btn btn-sm btn-icon btn-dark waves-effect" title="Print"><i class="fa fa-print"></i></a>';
                 $btn .= '<a href="' . url('detail-surat-keluar/' . Hashids::encode($row->id_qr)) . '" target="_blank" class="btn btn-sm btn-icon btn-primary waves-effect" title="Detail"><i class="fa fa-eye"></i></a>';
-                $btn .= '<a href="' . url('dashboard/surat-keluar/edit/' . Hashids::encode($row->id_qr)) . '" class="btn btn-sm btn-icon btn-success waves-effect" title="Edit"><i class="fa fa-edit"></i></a>';
-                $btn .= '<a href="javascript:void(0)" onclick="deleteData(' . "'" . Hashids::encode($row->id_qr) . "'" . ')" class="btn btn-sm btn-icon btn-danger waves-effect" title="Hapus"><i class="fa fa-trash"></i></a>';
+                if (Auth::user()->level == 'superadmin' || Auth::user()->level == 'umum') {
+                    $btn .= '<a href="' . url('dashboard/surat-keluar/edit/' . Hashids::encode($row->id_qr)) . '" class="btn btn-sm btn-icon btn-success waves-effect" title="Edit"><i class="fa fa-edit"></i></a>';
+                    $btn .= '<a href="javascript:void(0)" onclick="deleteData(' . "'" . Hashids::encode($row->id_qr) . "'" . ')" class="btn btn-sm btn-icon btn-danger waves-effect" title="Hapus"><i class="fa fa-trash"></i></a>';
+                }
                 $btn .= '</div>';
                 return $btn;
             })
@@ -346,6 +356,7 @@ class KodeQRController extends Controller
     public function show($id)
     {
         $checkData = KodeQR::find(Hashids::decode($id));
+
         if (count($checkData) > 0) :
             $dataMaster = $checkData[0];
             $data =
@@ -360,7 +371,17 @@ class KodeQRController extends Controller
                     'qrcode' => $dataMaster->qrcode,
                     'status_surat' => $dataMaster->status_surat,
                     'berkas' => $dataMaster->berkas,
+                    'listDetail' => DisposisiSuratKeluar::where('id_surat_keluar', Hashids::decode($id)[0])->orderBy('tgl_masuk', 'DESC')->get(),
                 ];
+
+            foreach ($data['listDetail'] as $key => $value){
+                $temp_kepada = $value->kepada;
+                $nama_level = getNamaLevel($temp_kepada);
+
+                $data['listDetail'][$key]->kepada = $nama_level;
+                $data['listDetail'][$key]->kode_level = $temp_kepada;
+            }
+
             return view('dashboard_page.kodeqr.show', $data);
         else :
             return redirect(route('surat-keluar'))
@@ -485,6 +506,7 @@ class KodeQRController extends Controller
                     'perihal' => $dataMaster->perihal,
                     'qrcode' => $dataMaster->qrcode,
                     'berkas' => $dataMaster->berkas,
+                    'status_surat' => $dataMaster->status_surat,
                     'nama_pembuat'=>$pembuat->name,
                     'bidang_pembuat'=>$bidang_pembuat,
                     'listPerangkat' => PerangkatDaerah::pluck('id_opd', 'nama_opd')->all(),
@@ -515,10 +537,10 @@ class KodeQRController extends Controller
                 return $nama_level;
             })
             ->editColumn('status_disposisi', function ($row) {
-                if ($row->status == 'DITERUSKAN'):
+                if ($row->status_disposisi == 'DITERUSKAN'):
                     $active = '<div class="text-primary font-weight-bolder"> DITERUSKAN </div>';
-                elseif ($row->status == 'DIKEMBALIKAN'):
-                    $active = '<div class="text-dark font-weight-bolder"> DIKEMBALIKAN </div>';
+                elseif ($row->status_disposisi == 'DIKEMBALIKAN'):
+                    $active = '<div class="text-danger font-weight-bolder"> DIKEMBALIKAN </div>';
                 else:
                     $active = '<div class="text-success font-weight-bolder"> TINDAK LANJUT </div>';
                 endif;

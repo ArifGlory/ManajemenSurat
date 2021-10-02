@@ -93,10 +93,29 @@
                                 </div>
                             </div>
                             <hr class="mb-2">
+
+                            <div class="col-sm-12">
+                                <div class="row mb-3">
+                                    <label class="col-sm-5 col-lg-5 col-form-label">5. Status Surat</label>
+
+                                    <label class="col-sm-7 col-lg-7 col-form-label font-weight-bolder">
+                                        @if($status_surat == "DRAFT")
+                                            <label class="col-sm-7 col-lg-7 col-form-label font-weight-bolder">
+                                                <span class="badge badge-success"> {{$status_surat}} </span>
+                                            </label>
+                                        @else
+                                            <label class="col-sm-7 col-lg-7 col-form-label font-weight-bolder">
+                                                <span class="badge badge-primary"> {{$status_surat}} </span>
+                                            </label>
+                                        @endif
+                                    </label>
+                                </div>
+                            </div>
+                            <hr class="mb-2">
                             @if($berkas)
                                 <div class="col-sm-12">
                                     <div class="row mb-3">
-                                        <label class="col-sm-5 col-lg-5 col-form-label">5. Berkas</label>
+                                        <label class="col-sm-5 col-lg-5 col-form-label">6. Berkas</label>
 
                                         <label class="col-sm-7 col-lg-7 col-form-label font-weight-bolder">
                                             <a href="{{url('berkas/'.$berkas)}}" target="_blank">
